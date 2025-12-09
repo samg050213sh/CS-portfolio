@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shynaiym Amanaliyeva - CS Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c9cbf;
+            --secondary: #a3b8cc;
+            --accent: #9d84b7;
+            --dark: oklab(24.166% -0.00006 -0.02982);
+            --darker: #151820;
+            --text: #e8ecf1;
+            --soft-glow: rgba(124, 156, 191, 0.3);
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.02;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            padding: 80px 20px 60px;
+            text-align: center;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .binary-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px var(--soft-glow);
+            opacity: 0;
+            animation: fadeInStable 2s forwards;
+        }
+
+        @keyframes fadeInStable {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tagline {
+            font-size: 1.3em;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeInStable 2s 0.5s forwards;
+        }
+
+        .terminal-line {
+            color: var(--accent);
+            font-size: 1em;
+            opacity: 0;
+            animation: fadeInStable 2s 1s forwards;
+        }
+
+        .terminal-line::before {
+            content: '> ';
+            color: var(--primary);
+        }
+
+        .code-decoration {
+            position: absolute;
+            font-size: 0.8em;
+            color: var(--secondary);
+            opacity: 0.3;
+        }
+
+        nav {
+            background: rgba(26, 31, 46, 0.95);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::before {
+            content: '{ ';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        nav a::after {
+            content: ' }';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover::before,
+        nav a:hover::after {
+            opacity: 1;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        section {
+            background: linear-gradient(135deg, rgba(26, 31, 46, 0.7), rgba(21, 24, 32, 0.8));
+            margin: 30px 0;
+            padding: 50px 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(124, 156, 191, 0.1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid var(--accent);
+            opacity: 0.2;
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+            display: inline-block;
+        }
+
+        h2::before {
+            content: '/* ';
+            color: var(--secondary);
+        }
+
+        h2::after {
+            content: ' */';
+            color: var(--secondary);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .profile-card {
+            background: rgba(124, 156, 191, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '// Profile.cs';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--dark);
+            padding: 2px 10px;
+            font-size: 0.75em;
+            color: var(--secondary);
+        }
+
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5em;
+            color: var(--dark);
+            margin: 0 auto 20px;
+            font-weight: bold;
+            box-shadow: 0 0 40px var(--soft-glow);
+        }
+
+        .info-item {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .info-label {
+            color: var(--secondary);
+            font-size: 0.85em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-label::before {
+            content: 'const ';
+            color: var(--accent);
+        }
+
+        .info-value {
+            color: var(--text);
+            font-size: 0.95em;
+            padding-left: 15px;
+        }
+
+        .lang-badge {
+            display: inline-block;
+            background: rgba(157, 132, 183, 0.2);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 3px;
+            border: 1px solid var(--accent);
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'philosophy.js';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--dark);
+            padding: 2px 10px;
+            font-size: 0.75em;
+            color: var(--secondary);
+        }
+
+        .code-line {
+            color: var(--text);
+            margin: 5px 0;
+        }
+
+        .code-comment {
+            color: #8b9bb3;
+        }
+
+        .code-keyword {
+            color: var(--accent);
+        }
+
+        .code-string {
+            color: var(--primary);
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .skill-item {
+            background: rgba(124, 156, 191, 0.05);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .skill-item::before {
+            content: 'class';
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.7em;
+            color: var(--secondary);
+            opacity: 0.5;
+        }
+
+        .skill-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--soft-glow);
+        }
+
+        .skill-name {
+            font-size: 1.2em;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .skill-name::before {
+            content: '{ ';
+            color: var(--accent);
+        }
+
+        .skill-name::after {
+            content: ' }';
+            color: var(--accent);
+        }
+
+        .skill-level {
+            color: var(--secondary);
+            font-size: 0.9em;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--secondary);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::after {
+            content: 'project.tsx';
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: var(--dark);
+            padding: 2px 10px;
+            font-size: 0.7em;
+            color: var(--secondary);
+        }
+
+        .project-card.in-progress::after {
+            content: 'WIP.tsx';
+            color: var(--accent);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px var(--soft-glow);
+            border-color: var(--primary);
+        }
+
+        .project-title {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .project-status {
+            display: inline-block;
+            background: rgba(157, 132, 183, 0.3);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            border: 1px solid var(--accent);
+        }
+
+        .project-desc {
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            background: rgba(163, 184, 204, 0.2);
+            color: var(--secondary);
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            border: 1px solid var(--secondary);
+        }
+
+        .tech-tag::before {
+            content: '<';
+            color: var(--primary);
+        }
+
+        .tech-tag::after {
+            content: '>';
+            color: var(--primary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-link {
+            color: var(--primary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .project-link:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .resume-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .resume-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+            position: relative;
+        }
+
+        .resume-block::before {
+            content: 'module.py';
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: var(--dark);
+            padding: 2px 10px;
+            font-size: 0.7em;
+            color: var(--secondary);
+        }
+
+        .resume-block h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .resume-block ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .resume-block li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .resume-block li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .video-section {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px dashed var(--accent);
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            max-width: 640px;
+            height: 360px;
+            margin: 20px auto;
+            background: rgba(157, 132, 183, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--accent);
+        }
+
+        .video-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            margin-top: 15px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .contact-card {
+            background: rgba(124, 156, 191, 0.05);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .contact-card::before {
+            content: 'export';
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            font-size: 0.7em;
+            color: var(--secondary);
+            opacity: 0.5;
+        }
+
+        .contact-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px var(--soft-glow);
+        }
+
+        .contact-icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .contact-label {
+            color: var(--secondary);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .contact-value {
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--primary);
+            border-top: 1px solid var(--primary);
+            margin-top: 60px;
+        }
+
+        footer::before {
+            content: '// End of file';
+            display: block;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .binary-name {
+                font-size: 1.8em;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resume-section {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg"></canvas>
+
+    <header>
+        <div class="code-decoration" style="top: 20px; left: 10%;">int main() </div>
+        <div class="code-decoration" style="top: 50px; right: 15%;">while(learning) {</div>
+        <div class="code-decoration" style="bottom: 80px; left: 20%;">return success;</div>
+        <div class="code-decoration" style="bottom: 50px; right: 10%;">}</div>
+        
+        <div class="binary-name" id="binaryName"></div>
+        <p class="tagline">Computer Science & Technology Student</p>
+        <p class="terminal-line">Seoul National University of Science and Technology | 2nd Year</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#resume">Resume</a></li>
+            <li><a href="#pitch">Pitch Video</a></li>
+            <li><a href="#contact">Contacts</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-grid">
+                <div class="profile-card">
+                    <div class="profile-image">
+                        <img src="image/profile_image.jpg" alt="SA"  style="width: 180px; height: 240px; border-radius: 50%; object-fit: cover; border: 2px solid #4a6fa5;">
+                 </div>
+
+                    <div class="info-item">
+                        <span class="info-label">birthDate =</span>
+                        <span class="info-value">"February 13, 2005";</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">origin =</span>
+                        <span class="info-value">"Kazakhstan 🇰🇿";</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">languages[] =</span>
+                        <div>
+                            <span class="lang-badge">Kazakh</span>
+                            <span class="lang-badge">Russian</span>
+                            <span class="lang-badge">Korean</span>
+                            <span class="lang-badge">English</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-content">
+                    <p>Hello! I'm Shynaiym Amanaliyeva, a passionate Computer Science and Technology student at Seoul National University of Science and Technology. I'm currently in my second year, diving deep into the world of programming, digital systems, and machine learning.</p>
+                    
+                    <p>Coming from Kazakhstan and studying in South Korea has given me a unique multicultural perspective. I'm fluent in four languages, which helps me collaborate with diverse teams and access knowledge from different parts of the world. My academic journey combines theoretical computer science with hands-on project experience.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-line"><span class="code-comment">// My coding philosophy</span></div>
+                        <div class="code-line"><span class="code-keyword">class</span> Developer {</div>
+                        <div class="code-line">&nbsp;&nbsp;<span class="code-keyword">constructor</span>() {</div>
+                        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;this.mindset = <span class="code-string">"Always learning, always building"</span>;</div>
+                        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;this.goal = <span class="code-string">"Create meaningful tech solutions"</span>;</div>
+                        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;this.passion = [<span class="code-string">"ML"</span>, <span class="code-string">"Digital Systems"</span>, <span class="code-string">"Open Source"</span>];</div>
+                        <div class="code-line">&nbsp;&nbsp;}</div>
+                        <div class="code-line">}</div>
+                    </div>
+
+                    <p>I'm particularly interested in machine learning, data analysis, and digital logic systems. I love solving complex problems through code and learning new technologies that push the boundaries of what's possible.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Technical Skills</h2>
+            <div class="skills-container">
+                <div class="skill-item">
+                    <div class="skill-name">Python</div>
+                <div class="skill-level">ML, Data Analysis ~ 99%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 99%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">C</div>
+                    <div class="skill-level">Systems Programming ~ 85%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">C++</div>
+                    <div class="skill-level">Object-Oriented ~ 75%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">HTML/CSS</div>
+                    <div class="skill-level">Web Development ~ 90%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Machine Learning</div>
+                    <div class="skill-level">Pandas, Matplotlib, Plotly, Analysis ~ 95%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-name">Digital Logic</div>
+                    <div class="skill-level">Logisim, Hardware ~ 80%</div>
+                    <div class="skill-bar">
+                        <div class="skill-progress" style="width: 80%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                <div class="project-image">
+                         <img src="image/scroll-it.jpg" alt="Scroll-It Project" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                 </div>
+
+                    <div class="project-title">📟 Scroll-It</div>
+                    <div class="project-desc">
+                        <strong>Digital Logic & System Design</strong><br>
+                        Designed and implemented a scrolling LED display board using Logisim. This project demonstrates understanding of digital circuits, timing control, and sequential logic systems. Features include custom message input, adjustable scrolling speed, and efficient circuit design.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Logisim</span>
+                        <span class="tech-tag">Digital Logic</span>
+                        <span class="tech-tag">Circuit Design</span>
+                    </div>
+                    <div class="project-desc">
+                        <strong>Check the ditails with this link: </strong>
+                    </div>
+                    <div class="project-links">
+                        <a href="docs/SHYNAIYM_poster.pdf" class="project-link" target="_blank">🔗 View Banner</a>
+                        <a href="https://github.com/samg050213sh/ReadBoard-Scroll-It.git" class="project-link" target="_blank">💻 GitHub</a>
+                        <a href="https://youtu.be/x3rWaCtVh48" class="project-link" target="_blank">🔗 Demo video</a>
+                    </div>
+                </div>
+
+                <div class="project-card in-progress">
+                    <div class="project-image">
+                         <img src="image/KZ-KR_JL.jpg" alt="KZ-KR Journey Life Project" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                 </div>
+
+                    <div class="project-title">🌏 KZ-KR Journey Life <span class="project-status">In Progress</span></div>
+                    <div class="project-desc">
+                        <strong>Open Source ML Project</strong><br>
+                        A machine learning project analyzing life journey patterns between Kazakhstan and Korea. Developed using Python in Google Colab, this project includes data preprocessing, statistical analysis, visualization, and predictive modeling. Available on GitHub for the open-source community.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">ML</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Colab</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/samg050213sh/kz-kr-life-journey.git" class="project-link" target="_blank">💻 GitHub</a>
+                        <a href="https://colab.research.google.com/github/samg050213sh/kz-kr-life-journey/blob/main/01_data_exploration.ipynb" class="project-link" target="_blank">📊 Colab</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                         <img src="image/Mytwohome.jpg" alt="My Two Homes Project" style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                 </div>
+
+                    <div class="project-title">🗺️ My Two Homes: Taraz & Seoul </div>
+                    <div class="project-desc">
+                        <strong>Cultural Memory Book: "Two Homes, One Heart"</strong><br>
+                        Term Project: Interactive Cultural Documentation System. A Streamlit-based web app that archives and visualizes cross-cultural experiences between Kazakh and Korean student through multimedia memories.
+                    </div>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Streamlit / CSS</span>
+                        <span class="tech-tag">Interactive Design</span>
+                        <span class="tech-tag">Cultural Heritage</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://mytwohomeshynaiym.streamlit.app/" class="project-link" target="_blank">🎮 Preview</a>
+                        <a href="docs/Dev Log_ My Two Homes Project.pdf" class="project-link" target="_blank">📝 Dev Log</a>
+                        <a href="https://github.com/samg050213sh/my_two_home_project-kr-kz-.git" class="project-link" target="_blank">💻 GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume">
+            <h2>Resume / CV</h2>
+            <div class="resume-section">
+                <div class="resume-block">
+                    <h3>🎓 Education</h3>
+                    <strong>Seoul National University of Science and Technology</strong>
+                    <p>Computer Science & Technology (2nd Year)</p>
+                    <p>Seoul, South Korea | 2024 - Present</p>
+                </div>
+
+                <div class="resume-block">
+                    <h3>💼 Experience</h3>
+                    <ul>
+                        <li>Digital Logic Systems coursework</li>
+                        <li>Machine Learning projects with Python</li>
+                        <li>Open-source contributions on GitHub</li>
+                        <li>Data analysis and visualization</li>
+                    </ul>
+                </div>
+                
+
+                <div class="resume-block">
+                    <h3>🏆 Certifications & Achievements</h3>
+                    <ul>
+                         <li>
+                            <a href="docs/토픽.pdf" target="_blank" style="color: inherit; text-decoration: none;">
+                                TOPIK Level 5 (Korean Proficiency)
+                            </a> <span style="margin-left: 8px; font-size: 12px; color: #4a6fa5;">📎 file</span>
+                        </li>
+                        <li>Multilingual communication (4 languages)</li>
+                        <li>Successful international student adaptation</li>
+                    </ul>
+                </div>
+                
+
+                <div class="resume-block">
+                    <h3>📚 Relevant Coursework</h3>
+                    <ul>
+                        <li>Digital Logic and System Design</li>
+                        <li>Data Structures & Algorithms</li>
+                        <li>Programming Languages (C/C++/Python)</li>
+                        <li>Machine Learning Fundamentals</li>
+                        <li>Web Development (HTML/CSS)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+                </section>
+                
+                
+       <section id="pitch">
+    <h2>Pitch Video</h2>
+    <div class="video-section">
+        <h3 style="color: var(--accent); margin-bottom: 15px;">🎥 My personal pitch video</h3>
+    
+        <!-- ЗДЕСЬ ВСТАВЬТЕ СВОЮ ССЫЛКУ НА YOUTUBE -->
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/x3rWaCtVh48?si=PPHdlBETGzK054U9" 
+                title="My Personal Pitch Video" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        
+        <!-- Кнопка для просмотра на YouTube -->
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="https://youtu.be/x3rWaCtVh48?si=PPHdlBETGzK054U9" 
+               target="_blank" 
+               style="display: inline-flex; 
+                      align-items: center; 
+                      gap: 8px; 
+                      background: #ff0000; 
+                      color: white; 
+                      padding: 5px 10px; 
+                      border-radius: 25px; 
+                      text-decoration: none; 
+                      font-weight: 500;">
+                <span style="font-size: 1.2em;">▶</span>
+                Watch on YouTube
+            </a>
+        </div>
+    </div>
+</section>
+
+        <section id="contact">
+            <h2>Contact Information</h2>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">samg050213@gmail.com</div>
+                    <a href="https://mail.google.com/mail/u/0/#inbox" class="email-link" target="_blank">🔗</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">💻</div>
+                    <div class="contact-label">GitHub</div>
+                    <div class="contact-value">github.com/shynaiym</div>
+                    <a href="https://github.com/samg050213sh" class="email-link" target="_blank">🔗</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">💼</div>
+                    <div class="contact-label">SeoulTech</div>
+                    <div class="contact-value">Seoul National University of Science and Technology</div>
+                    <a href="https://en.seoultech.ac.kr/" class="email-link" target="_blank">🔗</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-label">Location</div>
+                    <div class="contact-value">Seoul, South Korea</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&lt;/&gt; Crafted with code by Shynaiym Amanaliyeva © 2025</p>
+        <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.7;">Built with passion for technology and innovation</p>
+    </footer>
+
+    <script>
+        // Binary name animation
+        function textToBinary(text) {
+            return text.split('').map(char => {
+                return char.charCodeAt(0).toString(2).padStart(8, '0');
+            }).join(' ');
+        }
+
+        function animateBinaryName() {
+            const name = "SHYNAIYM AMANALIYEVA";
+            const binaryName = textToBinary(name);
+            const element = document.getElementById('binaryName');
+            let index = 0;
+            
+            const interval = setInterval(() => {
+                if (index < binaryName.length) {
+                    element.textContent = binaryName.substring(0, index + 1);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        element.textContent = name;
+                    }, 1000);
+                }
+            }, 20);
+        }
+
+        // Matrix rain effect
+        const canvas = document.querySelector('.matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(21, 24, 32, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#7c9cbf';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Intersection Observer for section animations
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Start binary name animation when page loads
+        window.addEventListener('load', animateBinaryName);
+    </script>
+</body>
+</html>
